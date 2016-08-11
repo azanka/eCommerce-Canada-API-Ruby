@@ -1,6 +1,6 @@
 require 'net/https'
 require 'uri'
-require 'c:/rubyapi/xml.rb'
+require_relative '../../eSELECTplus_Ruby_API_v252/eSELECTplus_Ruby_API_v252/xml.rb'
 require 'rexml/document'
 
 class MpiHttpsPoster
@@ -15,7 +15,7 @@ class MpiHttpsPoster
                 puts "Sending:\n#{mpi_request.to_xml}"
 
 								mpiresponse = Mpiresponse.new
-								
+
                 http.start {
                         http.request_post("/mpi/servlet/MpiServlet",mpi_request.to_xml, {'User-Agent' => 'Ruby (v1.2.0)'}) {|res|
                                 mpiresponse.from_xml(res.body)
@@ -60,14 +60,14 @@ class Mpiresponse < Xml
         def to_xml(indent="")
                 to_xml_low("MpiResponse",@@keys,indent)
         end
-				
+
 				def from_xml(element)
 					doc = REXML::Document.new(element)
 #					receipt = RespMod::Receipt.new
 #					receipt.from_xml(doc.root().get_elements("receipt")[0])
 #					@map['receipt'] = receipt
 #					Mpiresponse.from_xml(doc.root().get_elements("MpiResponse")[0])
-					
+
 					@map['type'] = doc.root().get_elements("type")[0].get_text.value
 					@map['success'] = doc.root().get_elements("success")[0].get_text.value
 					@map['message'] = doc.root().get_elements("message")[0].get_text.value

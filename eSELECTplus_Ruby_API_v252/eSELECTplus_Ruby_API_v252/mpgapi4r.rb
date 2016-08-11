@@ -1,11 +1,11 @@
 require 'net/https'
 require 'uri'
-require './xml.rb' #path to xml.rb
+require_relative './xml.rb' #path to xml.rb
 require 'rexml/document'
 
 class HttpsPoster
 
-  @@uri = URI.parse("https://esqa.moneris.com") 
+  @@uri = URI.parse("https://esqa.moneris.com")
 
   def HttpsPoster.post(mpg_request)
     http = Net::HTTP.new(@@uri.host,@@uri.port)
@@ -15,13 +15,13 @@ class HttpsPoster
     puts "Sending:\n#{mpg_request.to_xml}"
 
     response = RespMod::Response.new
-    
+
     http.start {
       http.request_post("/gateway2/servlet/MpgRequest",mpg_request.to_xml, {'User-Agent' => 'RUBY - 2.5.2'}) {|res|
         response.from_xml(res.body)
       }
     }
-    
+
     return response
   end
 end
@@ -266,16 +266,16 @@ class Response < Xml
         def to_xml(indent="")
                 to_xml_low("response",@@keys,indent)
         end
-        
+
         def from_xml(xml)
           doc = REXML::Document.new(xml)
-          
+
           #doc.write($stdout, 1)
-          
+
           receipt = RespMod::Receipt.new
           receipt.from_xml(doc.root().get_elements("receipt")[0])
           @map['receipt'] = receipt
-          
+
         end
 end
 
@@ -292,67 +292,67 @@ class Receipt < Xml
         "Language","ErrorCode","ErrorMessage","ActivationCharge",
         "RemainingBalance","CardStatus","Card","CavvResultCode",
         "ITDResponse","status_code","status_message"]
-        
+
         make_attrs(Receipt,@@keys)
 
         def to_xml(indent="")
                to_xml_low("receipt",@@keys,indent)
         end
-        
+
         def from_xml(element)
-        
+
           if element.get_elements("ReceiptId")[0] != nil
             @map['ReceiptId'] = element.get_elements("ReceiptId")[0].get_text.value
           end
-          
+
           if element.get_elements("ReferenceNum")[0] != nil
             @map['ReferenceNum'] = element.get_elements("ReferenceNum")[0].get_text.value
           end
-          
+
           if element.get_elements("ResponseCode")[0] != nil
             @map['ResponseCode'] = element.get_elements("ResponseCode")[0].get_text.value
           end
-          
+
           if element.get_elements("ISO")[0] != nil
             @map['ISO'] = element.get_elements("ISO")[0].get_text.value
           end
-          
+
           if element.get_elements("AuthCode")[0] != nil
             @map['AuthCode'] = element.get_elements("AuthCode")[0].get_text.value
           end
-          
+
           if element.get_elements("TransTime")[0] != nil
             @map['TransTime'] = element.get_elements("TransTime")[0].get_text.value
-          end 
-          
+          end
+
           if element.get_elements("TransDate")[0] != nil
-            @map['TransDate'] = element.get_elements("TransDate")[0].get_text.value            
+            @map['TransDate'] = element.get_elements("TransDate")[0].get_text.value
           end
 
           if element.get_elements("TransType")[0] != nil
             @map['TransType'] = element.get_elements("TransType")[0].get_text.value
           end
-          
+
           if element.get_elements("Complete")[0] != nil
             @map['Complete'] = element.get_elements("Complete")[0].get_text.value
           end
-          
+
           if element.get_elements("Message")[0] != nil
             @map['Message'] = element.get_elements("Message")[0].get_text.value
           end
-          
+
           if element.get_elements("TransAmount")[0] != nil
             @map['TransAmount'] = element.get_elements("TransAmount")[0].get_text.value
           end
-          
+
           if element.get_elements("CardType")[0] != nil
             @map['CardType'] = element.get_elements("CardType")[0].get_text.value
-          end  
-            
-          if element.get_elements("TransID")[0] != nil            
+          end
+
+          if element.get_elements("TransID")[0] != nil
             @map['TransID'] = element.get_elements("TransID")[0].get_text.value
           end
-          
+
           if element.get_elements("TimedOut")[0] != nil
             @map['TimedOut'] = element.get_elements("TimedOut")[0].get_text.value
           end
@@ -360,35 +360,35 @@ class Receipt < Xml
           if element.get_elements("RecurSuccess")[0] != nil
             @map['RecurSuccess'] = element.get_elements("RecurSuccess")[0].get_text.value
           end
-        
+
           if element.get_elements("AvsResultCode")[0] != nil
             @map['AvsResultCode'] = element.get_elements("AvsResultCode")[0].get_text.value
           end
-          
+
           if element.get_elements("CvdResultCode")[0] != nil
             @map['CvdResultCode'] = element.get_elements("CvdResultCode")[0].get_text.value
           end
-          
+
           if element.get_elements("CavvResultCode")[0] != nil
 	    @map['CavvResultCode'] = element.get_elements("CavvResultCode")[0].get_text.value
           end
-          
+
           if element.get_elements("ITDResponse")[0] != nil
 	    @map['ITDResponse'] = element.get_elements("ITDResponse")[0].get_text.value
           end
-          
+
           if element.get_elements("status_code")[0] != nil
 	    @map['status_code'] = element.get_elements("status_code")[0].get_text.value
           end
-          
+
           if element.get_elements("status_message")[0] != nil
 	    @map['status_message'] = element.get_elements("status_message")[0].get_text.value
           end
-        
+
           if element.get_elements("NextRecurDate")[0] != nil
             @map['NextRecurDate'] = element.get_elements("NextRecurDate")[0].get_text.value
           end
-        
+
           if element.get_elements("RecurEndDate")[0] != nil
             @map['RecurEndDate'] = element.get_elements("RecurEndDate")[0].get_text.value
           end
@@ -396,71 +396,71 @@ class Receipt < Xml
           if element.get_elements("HostReferenceNum")[0] != nil
             @map['HostReferenceNum'] = element.get_elements("HostReferenceNum")[0].get_text
           end
-          
+
           if element.get_elements("TransCardCode")[0] != nil
             @map['TransCardCode'] = element.get_elements("TransCardCode")[0].get_text
           end
-          
+
           if element.get_elements("TransCardType")[0] != nil
             @map['TransCardType'] = element.get_elements("TransCardType")[0].get_text
           end
-          
+
           if element.get_elements("Ticket")[0] != nil
             @map['Ticket'] = element.get_elements("Ticket")[0].get_text.value
           end
-          
+
           if element.get_elements("TimedOut")[0] != nil
             @map['TimedOut'] = element.get_elements("TimedOut")[0].get_text
           end
-          
+
           if element.get_elements("DisplayText")[0] != nil
             @map['DisplayText'] = element.get_elements("DisplayText")[0].get_text
           end
-          
+
           if element.get_elements("ReceiptText")[0] != nil
             @map['ReceiptText'] = element.get_elements("ReceiptText")[0].get_text
           end
-          
+
           if element.get_elements("CardHolderName")[0] != nil
             @map['CardHolderName'] = element.get_elements("CardHolderName")[0].get_text
           end
-          
+
           if element.get_elements("VoucherText")[0] != nil
             @map['VoucherText'] = element.get_elements("VoucherText")[0].get_text
           end
-          
+
           if element.get_elements("VoucherType")[0] != nil
             @map['VoucherType'] = element.get_elements("VoucherType")[0].get_text
           end
-          
+
           if element.get_elements("InitialAmount")[0] != nil
             @map['InitialAmount'] = element.get_elements("InitialAmount")[0].get_text
           end
-          
+
           if element.get_elements("InitialBalance")[0] != nil
             @map['InitialBalance'] = element.get_elements("InitialBalance")[0].get_text
           end
-          
+
           if element.get_elements("BatchNo")[0] != nil
             @map['BatchNo'] = element.get_elements("BatchNo")[0].get_text
           end
-          
+
           if element.get_elements("CurrentBalance")[0] != nil
             @map['CurrentBalance'] = element.get_elements("CurrentBalance")[0].get_text
           end
-          
+
           if element.get_elements("Benefit")[0] != nil
             @map['Benefit'] = element.get_elements("Benefit")[0].get_text
           end
-          
+
           if element.get_elements("Language")[0] != nil
             @map['Language'] = element.get_elements("Language")[0].get_text
           end
-          
+
           if element.get_elements("ErrorCode")[0] != nil
             @map['ErrorCode'] = element.get_elements("ErrorCode")[0].get_text
           end
-          
+
           if element.get_elements("ErrorMessage")[0] != nil
             @map['ErrorMessage'] = element.get_elements("ErrorMessage")[0].get_text
           end
@@ -468,30 +468,30 @@ class Receipt < Xml
           if element.get_elements("ActivationCharge")[0] != nil
             @map['ActivationCharge'] = element.get_elements("ActivationCharge")[0].get_text
           end
-          
+
           if element.get_elements("RemainingBalance")[0] != nil
             @map['RemainingBalance'] = element.get_elements("RemainingBalance")[0].get_text
           end
-          
+
           if element.get_elements("CardStatus")[0] != nil
             @map['CardStatus'] = element.get_elements("CardStatus")[0].get_text
           end
 
-          
+
           if element.get_elements("BankTotals")[0] != nil
             banktotals = RespMod::Banktotals.new
             banktotals.from_xml(element.get_elements("BankTotals")[0])
             @map['BankTotals'] = banktotals
           end
-          
+
           if element.get_elements("HostTotals")[0] != nil
-            
+
            hosttotals = RespMod::HostTotals.new
            hosttotals.from_xml(element.get_elements("HostTotals")[0])
            @map['HostTotals'] = hosttotals
           end
-       
-          if element.get_elements("InitData")[0] != nil       
+
+          if element.get_elements("InitData")[0] != nil
 #          card = RespMod::Card.new
 #          card.from_xml(element.get_elements("Card")[0])
 #          @map['Card'] = card
@@ -499,7 +499,7 @@ class Receipt < Xml
            initdata.from_xml(element.get_elements("InitData")[0])
            @map['InitData'] = initdata
          end
-         
+
          #@map['Ticket'] = element.get_elements("Ticket")[0].get_text.value
        end
 end
@@ -511,13 +511,13 @@ class Banktotals < Xml
         def to_xml(indent="")
           to_xml_low("BankTotals",@@keys,indent)
         end
-        
+
         def from_xml(element)
-        
+
           ecr = RespMod::BTEcr.new
           ecr.from_xml(element.get_elements("ECR")[0])
           @map['ECR'] = ecr
-        
+
         end
 end
 
@@ -528,28 +528,28 @@ class BTEcr < Xml
         def to_xml(indent="")
           to_xml_low("ECR",@@keys,indent)
         end
-        
+
         def from_xml(element)
-          
+
           if element != nil
-  
+
             @map['term_id'] = element.get_elements("term_id")[0].get_text.value
             @map['closed'] = element.get_elements("closed")[0].get_text.value
-          
+
             cards = Array.new
-          
+
             card1 = RespMod::BTCard.new
             card1.from_xml(element.get_elements("Card")[0])
-                    
+
             card2 = RespMod::BTCard.new
             card2.from_xml(element.get_elements("Card")[1])
-          
-          
+
+
             card3 = RespMod::BTCard.new
             card3.from_xml(element.get_elements("Card")[2])
-          
+
             cards << card1 << card2 << card3
-          
+
             @map['Card'] = cards
           end
         end
@@ -562,14 +562,14 @@ class BTCard < Xml
         def to_xml(indent="")
                 to_xml_low("Card",@@keys,indent)
         end
-        
+
         def from_xml(element)
-          
+
           if element != nil
             purchase = RespMod::Purchase.new
             purchase.from_xml(element.get_elements("Purchase")[0])
             @map['Purchase'] = purchase
-        
+
             refund = RespMod::Refund.new
             refund.from_xml(element.get_elements("Refund")[0])
             @map['Refund'] = refund
@@ -577,24 +577,24 @@ class BTCard < Xml
             correction = RespMod::Correction.new
             correction.from_xml(element.get_elements("Correction")[0])
             @map['Correction'] = correction
-          
-          
+
+
             if element.get_elements("CardType")[0] !=nil
               @map['CardType'] = element.get_elements("CardType")[0].get_text.value
             end
           end
         end
-        
+
 end
 
 class InitData < Xml
-  @@keys = ["Card"]  
+  @@keys = ["Card"]
   make_attrs(InitData,@@keys)
- 
+
   def to_xml(indent="")
     to_xml_low("InitData",@@keys,indent)
   end
- 
+
   def from_xml(element)
     cards = Array.new
     if element != nil
@@ -615,38 +615,38 @@ class HostTotals < Xml
         def to_xml(indent="")
           to_xml_low("HostTotals",@@keys,indent)
         end
-        
+
         def from_xml(element)
-        
+
           ecr = RespMod::ECR.new
           ecr.from_xml(element.get_elements("ECR")[0])
           @map['ECR'] = ecr
-        
+
         end
 end
 
 
 class ECR < Xml
-  @@keys = ["term_id","closed","Card"]  
+  @@keys = ["term_id","closed","Card"]
   make_attrs(ECR,@@keys)
- 
+
   def to_xml(indent="")
     to_xml_low("ECR",@@keys,indent)
   end
- 
+
   def from_xml(element)
-    
+
     if element != nil
-        
+
       if element.get_elements("term_id")[0] !=nil
         @map['term_id'] = element.get_elements("term_id")[0].get_text
       end
       if element.get_elements("closed")[0] !=nil
         @map['closed'] = element.get_elements("closed")[0].get_text
       end
-      
+
       cards = Array.new
-      
+
       0.upto(element.get_elements("Card").length-1) do |x|
         card = RespMod::BatchCards.new
         card.from_xml(element.get_elements("Card")[x])
@@ -667,22 +667,22 @@ class Card < Xml
         def to_xml(indent="")
           to_xml_low("Card",@@keys,indent)
         end
-        
+
         def from_xml(element)
-          
+
           if element != nil
-  
+
             @map['CardCode'] = element.get_elements("CardCode")[0].get_text
             @map['CardCardType'] = element.get_elements("CardType")[0].get_text
             @map['CheckMod10'] = element.get_elements("CheckMod10")[0].get_text
             @map['CheckLanguage'] = element.get_elements("CheckLanguage")[0].get_text
-            @map['CVCPrompt'] = element.get_elements("CVCPrompt")[0].get_text       
+            @map['CVCPrompt'] = element.get_elements("CVCPrompt")[0].get_text
             @map['InfoPrompt'] = element.get_elements("InfoPrompt")[0].get_text
             @map['InitialAmountPrompt'] = element.get_elements("InitialAmountPrompt")[0].get_text
-            @map['RefundAllowed'] = element.get_elements("RefundAllowed")[0].get_text            
+            @map['RefundAllowed'] = element.get_elements("RefundAllowed")[0].get_text
             @map['CardLengthMinimum'] = element.get_elements("CardLengthMinimum")[0].get_text
             @map['CardLengthMaximum'] = element.get_elements("CardLengthMaximum")[0].get_text
-            @map['LowBIN1'] = element.get_elements("LowBIN1")[0].get_text           
+            @map['LowBIN1'] = element.get_elements("LowBIN1")[0].get_text
             @map['HighBIN1'] = element.get_elements("HighBIN1")[0].get_text
             @map['LowBIN2'] = element.get_elements("LowBIN2")[0].get_text
             @map['HighBIN2'] = element.get_elements("HighBIN2")[0].get_text
@@ -690,7 +690,7 @@ class Card < Xml
             @map['HighBIN3'] = element.get_elements("HighBIN3")[0].get_text
             @map['LowBIN4'] = element.get_elements("LowBIN4")[0].get_text
             @map['HighBIN4'] = element.get_elements("HighBIN4")[0].get_text
-            
+
             texts = Array.new
             0.upto(element.get_elements("Text").length-1) do |y|
               text = RespMod::Text.new
@@ -709,7 +709,7 @@ class Text < Xml
         def to_xml(indent="")
           to_xml_low("Text",@@keys,indent)
         end
-        
+
         def from_xml(element)
             if element.get_elements("RecordType")[0] !=nil
               @map['RecordType'] = element.get_elements("RecordType")[0].get_text
@@ -745,11 +745,11 @@ class BatchCards < Xml
         def to_xml(indent="")
           to_xml_low("Card",@@keys,indent)
         end
-        
+
         def from_xml(element)
-          
+
           if element != nil
-  
+
             @map['CardCode'] = element.get_elements("CardCode")[0].get_text
             @map['PurchaseCount'] = element.get_elements("PurchaseCount")[0].get_text
             @map['PurchaseTotal'] = element.get_elements("PurchaseTotal")[0].get_text
@@ -761,10 +761,10 @@ class BatchCards < Xml
             @map['RedemptionTotal'] = element.get_elements("RedemptionTotal")[0].get_text
             @map['RedemptionBenefitTotal'] = element.get_elements("RedemptionBenefitTotal")[0].get_text
             @map['ActivationCount'] = element.get_elements("ActivationCount")[0].get_text
-            @map['ActivationTotal'] = element.get_elements("ActivationTotal")[0].get_text            
+            @map['ActivationTotal'] = element.get_elements("ActivationTotal")[0].get_text
             @map['CorrectionCount'] = element.get_elements("CorrectionCount")[0].get_text
-            @map['CorrectionTotal'] = element.get_elements("CorrectionTotal")[0].get_text            
-            
+            @map['CorrectionTotal'] = element.get_elements("CorrectionTotal")[0].get_text
+
           end
         end
 end
@@ -776,7 +776,7 @@ class Purchase < Xml
         def to_xml(indent="")
                 to_xml_low("Purchase",@@keys,indent)
         end
-        
+
         def from_xml(element)
           if element !=nil
             @map['Count'] = element.get_elements("Count")[0].get_text.value
@@ -792,7 +792,7 @@ class Refund < Xml
         def to_xml(indent="")
                 to_xml_low("Refund",@@keys,indent)
         end
-        
+
         def from_xml(element)
           if element !=nil
             @map['Count'] = element.get_elements("Count")[0].get_text.value
@@ -808,7 +808,7 @@ class Correction < Xml
         def to_xml(indent="")
                 to_xml_low("Correction",@@keys,indent)
         end
-        
+
         def from_xml(element)
           if element !=nil
             @map['Count'] = element.get_elements("Count")[0].get_text.value
